@@ -4,6 +4,7 @@ public class Company {
 	private int CompanyID;
 	private String Name;
 	private String Description;
+	private Owner Person;
 	
 	public int getCompanyID() {
 		return CompanyID;
@@ -23,6 +24,13 @@ public class Company {
 	public void setDescription(String description) {
 		Description = description;
 	}
+	public Owner getPerson() {
+		return Person;
+	}
+	public void setPerson(Owner person) {
+		Person = person;
+	}
+	
 	
 	
 }
