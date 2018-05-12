@@ -1,5 +1,7 @@
 package sqlite;
 
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by proharvesting on 5/11/2018.
@@ -24,51 +26,54 @@ package sqlite;
  */
 
 public class ObjectToSQLite {
-	public static String ObjectToSQLite_Create(Object object, Class<?> classname, String FieldID)throws Exception {
+	public static String ObjectToSQLite_Create(Object object, Class<?> classname, String FieldID) throws Exception {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("CREATE TABLE '"+classname.getSimpleName()+"' (");
 
         stringBuilder.append("'"+FieldID+"' INTEGER PRIMARY KEY  NOT NULL ,");
 
-        
+
         GetClassAttributtes get =new GetClassAttributtes(object);
+
+        List<String> StrSQLFields = new ArrayList<String>();
         for(int i=0;i<get.getFields().size();i++){
             String ColumnName = get.getFields().get(i);
-
             if(!ColumnName.equals("") && !ColumnName.equals(FieldID) && !ColumnName.contains("Comparator")){
-
+                
                 String typeValue = get.getTypeFromVariableName(ColumnName);
 
                 if(typeValue.equals("class java.lang.String")){
-
-                    stringBuilder.append("'"+ColumnName+"' String VARCHAR(256)");
-
+                    StrSQLFields.add("'"+ColumnName+"' VARCHAR(256)");
                 }
                 if(typeValue.equals("int")){
-                    int objectvalue= Integer.parseInt(get.getValueFromVariableName(ColumnName).toString());
-                   
+                    StrSQLFields.add("'"+ColumnName+"' INTEGER ");
                 }
                 if(typeValue.equals("float")){
-                    stringBuilder.append("'"+ColumnName+"' DOUBLE ");
+                    StrSQLFields.add("'"+ColumnName+"' DOUBLE ");
                 }
                 if(typeValue.equals("double")){
-                    stringBuilder.append("'"+ColumnName+"' DOUBLE ");
+                    StrSQLFields.add("'"+ColumnName+"' DOUBLE ");
                 }
                 if(typeValue.equals("boolean")){
-                    stringBuilder.append("'"+ColumnName+"' BOOL ");
+                    StrSQLFields.add("'"+ColumnName+"' BOOL ");
+
                 }
                 if(typeValue.equals("class java.util.Date")){
-                    stringBuilder.append("'"+ColumnName+"' TEXT ");
-                }
-                
-                if(i<get.getFields().size()-1){
-                    stringBuilder.append(",");
+                    StrSQLFields.add("'"+ColumnName+"' TEXT ");
                 }
             }
-            
+        }
+        int counter=0;
+        for (String strSQL : StrSQLFields ) {
+            counter++;
+            stringBuilder.append(strSQL);
+            if(counter<StrSQLFields.size()){
+                stringBuilder.append(",");
+            }
         }
         stringBuilder.append(");");
+        
         return stringBuilder.toString();
     }
 }
