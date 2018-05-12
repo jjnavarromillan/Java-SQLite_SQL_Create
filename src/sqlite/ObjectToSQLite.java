@@ -1,10 +1,33 @@
 package sqlite;
 
+
+/**
+ * Created by proharvesting on 5/11/2018.
+ *
+     public class Company {
+         private int CompanyID;
+         private String Name;
+         private String Description;
+         private Owner Person;
+     }
+
+    USES
+
+        db.execSQL(ObjectToSQLiteStatement.ObjectToSQLite_Create(new Company(),Company.class,"CompanyID"));
+
+    RESULT:
+
+        CREATE TABLE 'Company' ('CompanyID' INTEGER PRIMARY KEY  NOT NULL ,'Name' String VARCHAR(256),'Description' String VARCHAR(256));
+
+ *
+ *
+ */
+
 public class ObjectToSQLite {
 	public static String ObjectToSQLite_Create(Object object, Class<?> classname, String FieldID)throws Exception {
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("CREATE TABLE '"+classname.getSimpleName()+"' ");
+        stringBuilder.append("CREATE TABLE '"+classname.getSimpleName()+"' (");
 
         stringBuilder.append("'"+FieldID+"' INTEGER PRIMARY KEY  NOT NULL ,");
 
@@ -45,7 +68,7 @@ public class ObjectToSQLite {
             }
             
         }
-        
+        stringBuilder.append(");");
         return stringBuilder.toString();
     }
 }
